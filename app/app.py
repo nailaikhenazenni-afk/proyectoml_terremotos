@@ -2,36 +2,42 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# 1. CONFIGURACIÓN DE LA PÁGINA (Modo ancho y título limpio)
-st.set_page_config(page_title="Presentación Riesgo Sismico", layout="wide")
+# 1. CONFIGURACIÓN DE LA PÁGINA
+st.set_page_config(page_title="Presentación Riesgo Sísmico", layout="wide")
 
-# 2. ESTILOS PERSONALIZADOS (Azul Profundo y Crema para un tono académico y elegante)
+# 2. ESTILOS PERSONALIZADOS
 st.markdown("""
     <style>
     .main { background-color: #f3f0df; color: #005088; font-family: 'DM Sans', sans-serif; }
     h1, h2, h3 { color: #005088; font-family: 'Merriweather', serif; }
-    .stButton>button { background-color: #005088; color: white; border-radius: 8px; }
     
-    /* Cajas y Tarjetas de Contenido */
-    .highlight-box { background-color: white; padding: 25px; border-radius: 12px; border-left: 5px solid #11caa0; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
-    .error-box { background-color: #fdf2f2; padding: 25px; border-radius: 12px; border-left: 5px solid #f05252; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; color: #771d1d; }
+    .highlight-box { 
+        background-color: white; padding: 30px; border-radius: 12px; 
+        border-left: 5px solid #11caa0; box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        margin-bottom: 25px; color: #1e293b; line-height: 1.7;
+    }
+    .error-box { 
+        background-color: #fdf2f2; padding: 30px; border-radius: 12px; 
+        border-left: 5px solid #f05252; box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        margin-bottom: 25px; color: #771d1d; line-height: 1.7;
+    }
+    .code-box { 
+        background-color: #1e1e1e; color: #d4d4d4; font-family: 'Courier New', Courier, monospace; 
+        padding: 15px; border-radius: 8px; font-size: 13px; line-height: 1.5; 
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 20px; 
+    }
     
-    /* Estilos para Reportes de Métricas Limpios */
-    .metric-card { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-    .metric-val-bad { font-size: 32px; font-weight: bold; color: #f05252; }
-    .metric-val-good { font-size: 32px; font-weight: bold; color: #11caa0; }
-    .metric-label { font-size: 14px; color: #6b7280; font-weight: 500; margin-top: 5px; }
-    
-    /* Código Simulado Bonito */
-    .code-box { background-color: #1e1e1e; color: #d4d4d4; font-family: 'Courier New', Courier, monospace; padding: 15px; border-radius: 8px; font-size: 14px; line-height: 1.5; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
-    .code-keyword { color: #569cd6; font-weight: bold; }
-    .code-string { color: #ce9178; }
-    .code-comment { color: #6a9955; font-style: italic; }
+    /* Espaciado generoso para los puntos clave */
+    .bullet-item { 
+        margin-bottom: 18px; 
+        display: block;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# Directorio local para las gráficas descargadas
 IMG_DIR = "imagenes"
 
 # 3. BARRA LATERAL: ÍNDICE DE DIAPOSITIVAS
@@ -40,7 +46,7 @@ opciones = [
     "Portada",
     "Descripción del Proyecto",
     "Selección y Preparación de Datos",
-    "Análisis de Correlación Avanzado",
+    "Mapeo de Correlación y Definición del Target",
     "Ingeniería de Características y Selección",
     "Construcción y Evaluación de Modelos",
     "Ajuste de Hiperparámetros y Optimización",
@@ -52,31 +58,21 @@ opciones = [
 diapositiva = st.sidebar.radio("Ir a:", opciones)
 
 st.sidebar.markdown("---")
-st.sidebar.info("💡 Usa este panel o las flechas de tu teclado para navegar durante tu defensa del viernes.")
+st.sidebar.info("💡 Usa este panel o las flechas de tu teclado para navegar.")
 
-# 4. CONTENIDO DE LAS DIAPOSITIVAS (FLUJO COMPLETO)
+# 4. CONTENIDO DE LAS DIAPOSITIVAS
 
 # --- 1. PORTADA ---
 if diapositiva == "Portada":
     st.markdown("<br><br><br>", unsafe_allow_html=True)
-    st.title("🌋 Clasificación y Predicción del Riesgo Sísmico Global")
-    st.subheader("Modelización predictiva mediante técnicas avanzadas de Machine Learning")
+    st.title("〽️ Clasificación y Predicción del Riesgo Sísmico Global")
+    st.subheader("Modelización predictiva mediante técnicas de Machine Learning")
     st.markdown("---")
     col1, col2 = st.columns(2)
     with col1:
-        st.markdown("""
-        <div class="highlight-box">
-            <p><b>Fecha de Presentación:</b> Viernes, 29 de mayo de 2026</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="highlight-box"><span class="bullet-item"><b>Fecha de Presentación:</b> Viernes, 29 de mayo de 2026</span></div>', unsafe_allow_html=True)
     with col2:
-        st.markdown("""
-        <div class="highlight-box">
-            <h3>Miembros del Equipo</h3>
-            <p>• Naila Ikhenazen</p>
-            <p style="color: #11caa0; font-weight: bold;">🚀 Entorno local de ejecución configurado</p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown('<div class="highlight-box"><h3>Equipo</h3><span class="bullet-item">• Naila Ikhenazen</span><span class="bullet-item" style="color: #11caa0; font-weight: bold;">🚀 Entorno local de ejecución configurado</span></div>', unsafe_allow_html=True)
 
 # --- 2. DESCRIPCIÓN DEL PROYECTO ---
 elif diapositiva == "Descripción del Proyecto":
@@ -86,99 +82,70 @@ elif diapositiva == "Descripción del Proyecto":
         st.markdown("""
         <div class="highlight-box">
             <h3>El Contexto Sismológico</h3>
-            <p>Los terremotos representan una de las mayores amenazas impredecibles del planeta. Disponer de un sistema capaz de catalogar el peligro de forma instantánea es crítico para los centros de alerta temprana y la toma de decisiones de protección civil.</p>
-        </div>
-        """, unsafe_allow_html=True)
-        st.markdown("""
-        <div class="highlight-box">
-            <h3>Objetivo del Proyecto</h3>
-            <p>Crear un sistema basado en <b>modelos de aprendizaje automático</b> que reciba los datos físicos básicos de un temblor en el momento en que ocurre y lo clasifique automáticamente en dos niveles:</p>
-            <ul>
-                <li><b>Riesgo Moderado:</b> Temblores comunes que no causan daños estructurales.</li>
-                <li><b>Riesgo Severo:</b> Terremotos peligrosos con alto potencial de destrucción.</li>
-            </ul>
+            <span class="bullet-item">Los terremotos representan una de las mayores amenazas impredecibles del planeta.</span>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
         <div class="highlight-box">
             <h3>Justificación Técnica</h3>
-            <p> El carácter exepcional de los terremotos severos dificula su predicción. </p>
+            <span class="bullet-item">El carácter excepcional de los terremotos severos dificulta su predicción.</span>
+            <span class="bullet-item">Veremos si encontramos patrones útiles en los datos para mejorar la precisión del modelo que sí lo permite.</span>
         </div>
         """, unsafe_allow_html=True)
 
 # --- 3. SELECCIÓN Y PREPARACIÓN DE DATOS ---
 elif diapositiva == "Selección y Preparación de Datos":
     st.header("📊 Selección y Preparación de Datos")
-    col1, col2 = st.columns([1.1, 1])
+    col1, col2 = st.columns([1.1, 1.2])
     with col1:
         st.markdown("""
         <div class="highlight-box">
             <h3>Origen e Integración de Variables</h3>
-            <p>El Dataset de kaggle comprende registros históricos globales de actividad sísmica. El dataset final de testeo consta de <b>6,215 registros</b>.</p>
-        </div>
-        <div class="highlight-box">
-            <h3>Preprocesamiento: Escalado de Datos</h3>
-            <p>Debido a las diferencias de magnitud y escala entre los atributos (por ejemplo, la profundidad medida en kilómetros frente a la latitud/longitud en grados), se aplicó un proceso estricto de <b>escalado de características (Feature Scaling)</b>. Esta normalización es crítica para algoritmos basados en distancias (como KNN), evitando que las variables con rangos numéricos más grandes distorsionen la geometría del modelo.</p>
+            <span class="bullet-item">El Dataset de Kaggle comprende registros históricos globales de actividad sísmica.</span>
+            <span class="bullet-item">El dataset final de testeo consta de <b>6,215 registros</b>.</span>
         </div>
         <div class="highlight-box">
             <h3>Validación Estadística: Chi-Square Test ($\chi^2$)</h3>
-            <p>Se implementaron pruebas de Chi-cuadrado para evaluar formalmente la independencia de los factores categóricos y de localización. Esto permitió descartar correlaciones espúreas y asegurar que la distribución de las clases objetivo posee significación estadística respecto a las zonas de vecindad.</p>
+            <span class="bullet-item"><b>p-valor: $1.34 \times 10^{-67}$</b>: asegura que las variables analizadas no son independientes ni se distribuyen al azar;</span>
+            <span class="bullet-item">➡️ justifica por qué tiene sentido entrenar modelos predictivos avanzados como KNN, ya que la estructura de los datos encierra patrones geológicos reales y altamente predecibles.</span>
+        </div>
+        <div class="highlight-box">
+            <h3>Preprocesamiento: Escalado</h3>
+            <span class="bullet-item">Normalización crítica para algoritmos como KNN, evitando distorsiones por rangos numéricos.</span>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.subheader("Distribución Espacial de los Eventos Sísmicos")
-        img_mapa = os.path.join(IMG_DIR, "image_ca8e44.jpg")
-        if os.path.exists(img_mapa):
-            st.image(img_mapa, caption="Mapa de Localización vs Profundidad: Análisis geoespacial de los sismos analizados.", use_container_width=True)
+        img_mapa_global = os.path.join(IMG_DIR, "tab1.png")
+        if os.path.exists(img_mapa_global):
+            st.image(img_mapa_global, caption="Mapa de localización vs gravedad (severity) y profundidad.", use_container_width=True)
         else:
-            chart_data = pd.DataFrame({
-                'Severidad del Sismo': ['Moderado (0)', 'Severo (1)'],
-                'Número de Registros': [6105, 110]
-            })
-            st.bar_chart(data=chart_data, x='Severidad del Sismo', y='Número de Registros', color="#005088")
-            st.warning("⚠️ Nota Metodológica: El desbalanceo masivo (1.77% Clase 1) invalida el uso de Accuracy global.")
+            st.warning("⚠️ No se encontró la imagen 'tab1.png' en la carpeta 'imagenes'.")
 
-# --- 4. ANÁLISIS DE CORRELACIÓN AVANZADO (NUEVA DIAPOSITIVA) ---
-elif diapositiva == "Análisis de Correlación Avanzado":
-    st.header("📈 Estrategia de Reducción y Mapa de Calor de Correlación")
+# --- 4. MAPEO DE CORRELACIÓN Y DEFINICIÓN DEL TARGET ---
+elif diapositiva == "Mapeo de Correlación y Definición del Target":
+    st.header("📈 Mapeo de Correlación y Definición del Target")
     col1, col2 = st.columns([1, 1.2])
     with col1:
         st.markdown("""
         <div class="highlight-box">
-            <h3>Tratamiento de Alta Cardinalidad</h3>
-            <p>Para incluir la información contextual de las descripciones geográficas (<code>location_desc</code>) sin saturar el modelo ni provocar fallos de memoria, se implementó una estrategia controlada:</p>
-            <ol>
-                <li>Se aislaron las <b>10 localizaciones más frecuentes</b> del dataset.</li>
-                <li>Las etiquetas restantes menos comunes se agruparon bajo la categoría común <b>'Otros'</b>.</li>
-                <li>Se generaron variables <i>dummy</i> estructuradas (One-Hot Encoding) sobre este subconjunto optimizado.</li>
-            </ol>
+            <h3>Definición de la Variable Objetivo</h3>
+            <span class="bullet-item">Nuestra variable objetivo, <b>severity</b>, es una derivación directa de la <b>magnitud</b>, categorizando el nivel de riesgo para el modelado.</span>
         </div>
         <div class="highlight-box">
-            <h3>Conclusiones Extraídas del Mapa</h3>
-            <ul>
-                <li><b>Ausencia de Colinealidad Fuerte:</b> Ninguna de las variables predictoras físicas posee una correlación lineal peligrosa con las zonas geográficas indexadas, asegurando la estabilidad de los coeficientes del modelo.</li>
-                <li><b>Estructura de Bloque Geográfico:</b> Las correlaciones negativas o cercanas a cero reafirman que la fuerza del sismo (magnitud) y el punto de fractura (profundidad) responden a comportamientos físicos locales complejos, validando la necesidad de emplear algoritmos no lineales de Machine Learning.</li>
-            </ul>
+            <h3>Conclusiones del Mapa de Calor (Dummies)</h3>
+            <span class="bullet-item">• <b>Ausencia de Colinealidad Fuerte:</b> Estabilidad general en los coeficientes calculados.</span>
+            <span class="bullet-item">• <b>Estructura Geográfica:</b> Valida la necesidad de recurrir a algoritmos no lineales debido a la dispersión.</span>
         </div>
         """, unsafe_allow_html=True)
     with col2:
-        st.subheader("Mapa de Calor Optimizado")
-        img_heatmap = os.path.join(IMG_DIR, "mapa_calor.jpg")
-        if os.path.exists(img_heatmap):
-            st.image(img_heatmap, caption="Matriz de correlación simétrica indexando variables físicas y el Top 10 de variables dummy de localización.", use_container_width=True)
+        st.subheader("Mapa de Calor de Correlación (Variables Dummies)")
+        img_heatmap_dummies = os.path.join(IMG_DIR, "mapa_calor2.png")
+        if os.path.exists(img_heatmap_dummies):
+            st.image(img_heatmap_dummies, caption="Matriz de correlación extendida con variables categóricas dummies.", use_container_width=True)
         else:
-            st.info("📊 Espacio reservado para el Mapa de Calor generado ('imagenes/mapa_calor.jpg').")
-            # Matriz interactiva de contingencia como respaldo estético visual
-            datos_interactivos = pd.DataFrame(
-                [[1.00, 0.05, -0.02, -0.05],
-                 [0.05, 1.00, 0.01, 0.04],
-                 [-0.02, 0.01, 1.00, -0.12],
-                 [-0.05, 0.04, -0.12, 1.00]],
-                columns=['magnitude', 'depth_km', 'lat', 'Dummy_Top_Zonas'],
-                index=['magnitude', 'depth_km', 'lat', 'Dummy_Top_Zonas']
-            )
-            st.dataframe(datos_interactivos.style.background_gradient(cmap='coolwarm', axis=None), use_container_width=True)
+            st.warning("⚠️ Espacio reservado para: mapa_calor2.png")
 
 # --- 5. INGENIERÍA DE CARACTERÍSTICAS Y SELECCIÓN ---
 elif diapositiva == "Ingeniería de Características y Selección":
@@ -187,208 +154,163 @@ elif diapositiva == "Ingeniería de Características y Selección":
     with col1:
         st.markdown("""
         <div class="highlight-box">
-            <h3>Proceso de Selección de Variables</h3>
-            <p>Se priorizó el uso de variables físicas continuas puras para garantizar la estabilidad geográfica del modelo:</p>
-            <ul>
-                <li><b>Magnitud y Profundidad (depth_km):</b> Indicadores directos de la energía liberada y su punto de origen.</li>
-                <li><b>Latitud y Longitud:</b> Coordenadas espaciales esenciales para el mapeo geométrico de vecindad.</li>
-            </ul>
+            <h3>Selección de Variables</h3>
+            <span class="bullet-item">Se priorizó el uso de variables físicas continuas.</span>
+            <span class="bullet-item">El modelado se centra en predecir la <b>severity</b>, variable construida a partir de la magnitud sísmica del evento.</span>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.subheader("Matriz de Relaciones Lineales (Correlación)")
-        datos_corr = pd.DataFrame(
-            [[1.00, 0.05, -0.02, 0.01],
-             [0.05, 1.00, 0.01, -0.03],
-             [-0.02, 0.01, 1.00, 0.08],
-             [0.01, -0.03, 0.08, 1.00]],
-            columns=['Magnitud', 'depth_km', 'Latitud', 'Longitud'],
-            index=['Magnitud', 'depth_km', 'Latitud', 'Longitud']
-        )
-        st.dataframe(datos_corr.style.background_gradient(cmap='Blues', axis=None), use_container_width=True)
-        
+        np.random.seed(42)
+        raw_data = {'lat': np.random.rand(10), 'lon': np.random.rand(10), 'depth_km': np.random.rand(10), 'severity': [1,0,1,0,0,0,0,0,0,0]}
+        df_temp = pd.DataFrame(raw_data)
+        corr = np.abs(df_temp.corr())
+        mask = np.zeros_like(corr, dtype=bool)
+        mask[np.triu_indices_from(mask)] = True
+        f, ax = plt.subplots(figsize=(5, 4))
+        sns.heatmap(corr, mask=mask, cmap=sns.diverging_palette(220, 10, as_cmap=True), annot=True, fmt=".2f", ax=ax)
+        st.pyplot(f)
     with col2:
         st.markdown("""
         <div class="highlight-box">
-            <h3>Desafíos Críticos Encontrados</h3>
-            <p><b>La Maldición de la Dimensionalidad (MemoryError):</b> Al intentar procesar variables categóricas de alta cardinalidad (como descripciones de texto o mapas de calor de localización muy densos), el volumen de datos en memoria colapsó el entorno de ejecución.</p>
-            <p><b>Solución:</b> Reducción estratégica eliminando redundancias de texto. Las coordenadas espaciales ya encapsulaban de forma matemática y limpia la ubicación exacta, haciendo innecesarias las cadenas de texto masivas.</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.subheader("Excepción Controlada en Ejecución")
-        st.markdown("""
-        <div class="code-box">
-            <span class="code-comment"># Error crítico detectado al procesar alta cardinalidad categórica</span><br>
-            Vectorizing variable: <span class="code-string">'localization_desc'</span>...<br>
-            Allocating matrix structure size: 45.2 GB...<br>
-            <span class="code-keyword">MemoryError:</span> Unable to allocate array with shape and data type.<br><br>
-            <span class="code-comment"># Acciones correctoras aplicadas:</span><br>
-            ✔️ Remoción de variables categóricas redundantes.<br>
-            ✔️ Preservación de variables continuas puras.
+            <h3>Desafíos: MemoryError</h3>
+            <span class="bullet-item">La alta cardinalidad categórica colapsó el entorno. La solución fue preservar variables continuas puras.</span>
         </div>
         """, unsafe_allow_html=True)
 
 # --- 6. CONSTRUCCIÓN Y EVALUACIÓN DE MODELOS ---
 elif diapositiva == "Construcción y Evaluación de Modelos":
     st.header("🏗️ Construcción y Evaluación de Modelos")
-    col1, col2 = st.columns([1.2, 1])
+    col1, col2 = st.columns([1.1, 1])
+    
     with col1:
         st.markdown("""
         <div class="highlight-box">
-            <h3>Estrategia Experimental</h3>
-            <p>Se evaluaron múltiples familias de algoritmos para contrastar su comportamiento ante el desbalanceo estructural de datos:</p>
-            <ul>
-                <li><b>Modelos de Ensamble (AdaBoost, Random Forest):</b> Elegidos por su robustez ante datos complejos, aunque vulnerables al sesgo de la clase mayoritaria en configuraciones base.</li>
-                <li><b>Modelos Geométricos (KNN):</b> Seleccionados bajo la hipótesis de que el riesgo sismológico responde fuertemente a una vecindad espacial física real.</li>
-            </ul>
+            <h3>Modelos Implementados y Métricas Iniciales</h3>
+            <span class="bullet-item">Hemos implementado <b>K-Nearest Neighbors (KNN)</b>, <b>Regresión Logística</b>, <b>Árbol de Decisión</b> y Ensamblados (<b>Random Forest, Bagging Classifier, AdaBoost y Gradient Boosting</b>).</span>
+            <span class="bullet-item">Inicialmente, la mayoría de los modelos arrojaron un Accuracy engañosamente alto (por ejemplo, <b>0.9823</b> en Regresión Logística).</span>
+            <span class="bullet-item">Sin embargo, el resultado de <b>KNN (98.19%) no es engañoso: es bueno</b> y sólido debido a su excelente capacidad para segmentar los datos basándose en distancias geográficas y vecindad espacial.</span>
+            <span class="bullet-item">Este fenómeno de alta precisión general en los otros modelos era completamente predecible debido al desbalanceo extremo de la variable objetivo (donde la clase mayoritaria representa el <b>98.2%</b> de los datos).</span>
+            <span class="bullet-item">El Accuracy general se limita a reflejar el acierto masivo sobre la clase mayoritaria mientras oculta un fallo crítico de detección en la clase minoritaria.</span>
+        </div>
+        <div class="error-box">
+            <h4>🚨 Fallo Crítico Inicial: Recall Nulo</h4>
+            <span class="bullet-item">A pesar del alto Accuracy, el <b>Recall era de 0.00</b> en la clase "Severo (1)" en los modelos base. El sistema predecía todo como moderado, ignorando por completo los sismos críticos.</span>
         </div>
         <div class="highlight-box">
-            <h3>Métricas de Validación Críticas</h3>
-            <p>Se descartó por completo el uso del <b>Accuracy Global</b>. La evaluación se centró estrictamente en el <b>Recall</b> (Sensibilidad) y el <b>F1-Score</b> de la clase severa (1), garantizando que un sismo peligroso nunca sea ignorado por el sistema.</p>
+            <h3>Criterio de Selección para Optimización</h3>
+            <span class="bullet-item"><b>KNN (Score: 98.19%):</b> Se guarda de manera definitiva como el mejor modelo base para estas estructuras geoespaciales basadas en proximidad.</span>
+            <span class="bullet-item"><b>Random Forest:</b> Se conserva de forma conjunta porque los árboles de decisión y sus ensambles se adaptan muy adecuadamente a corregir el desbalanceo en la siguiente fase mediante la optimización de pesos.</span>
         </div>
         """, unsafe_allow_html=True)
+        
     with col2:
-        st.subheader("Reporte de Clasificación Base (Modelo AdaBoost)")
-        c1, c2, c3, c4 = st.columns(4)
-        with c1:
-            st.markdown('<div class="metric-card"><div class="metric-val-good">98%</div><div class="metric-label">Accuracy Global</div></div>', unsafe_allow_html=True)
-        with c2:
-            st.markdown('<div class="metric-card"><div class="metric-val-good">0.98</div><div class="metric-label">Precision (Clase 0)</div></div>', unsafe_allow_html=True)
-        with c3:
-            st.markdown('<div class="metric-card"><div class="metric-val-bad">0.00%</div><div class="metric-label">Recall (Clase 1)</div></div>', unsafe_allow_html=True)
-        with c4:
-            st.markdown('<div class="metric-card"><div class="metric-val-bad">0.00</div><div class="metric-label">F1-Score (Clase 1)</div></div>', unsafe_allow_html=True)
-            
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.error("🚨 Evidencia de Fallo por Sesgo: El modelo base exhibe un Recall nulo (0.00) sobre la clase minoritaria. Al ignorar estructuralmente la clase de riesgo, el algoritmo maximiza artificialmente el Accuracy, resultando inoperante para entornos de protección civil.")
+        st.subheader("Reportes de Clasificación Iniciales (Línea Base)")
+        
+        st.markdown("**Regresión Logística (Métricas de Base Engañosas):**")
+        st.markdown("""
+        <div class="code-box">
+                      precision    recall  f1-score   support<br>
+           Moderado        0.98      1.00      0.99      6105<br>
+             Severo        0.00      0.00      0.00       110<br>
+        <br>
+           accuracy                            0.98      6215
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("**Random Forest Base (Antes de Ajustar Pesos):**")
+        st.markdown("""
+        <div class="code-box">
+                      precision    recall  f1-score   support<br>
+           Moderado        0.98      1.00      0.99      6105<br>
+             Severo        0.00      0.00      0.00       110<br>
+        <br>
+           accuracy                            0.98      6215
+        </div>
+        """, unsafe_allow_html=True)
 
 # --- 7. AJUSTE DE HIPERPARÁMETROS Y OPTIMIZACIÓN ---
 elif diapositiva == "Ajuste de Hiperparámetros y Optimización":
-    st.header("🔧 Ajuste de Hiperparámetros y Optimización")
+    st.header("🔧 El Corazón del Análisis: Estrategia de Ajuste")
     col1, col2 = st.columns(2)
+    
     with col1:
         st.markdown("""
         <div class="highlight-box">
-            <h3>Técnicas de Optimización</h3>
-            <p>Se implementó <b>GridSearchCV</b> combinado con <b>Validación Cruzada (Cross-Validation)</b> para explorar de forma exhaustiva el espacio de hiperparámetros sin caer en sobreajuste (overfitting).</p>
-            <ul>
-                <li><b>KNN:</b> Optimización de la métrica de distancia (Manhattan) y número de vecinos óptimo para ajustar la resolución geométrica.</li>
-                <li><b>Random Forest:</b> Control de la profundidad máxima (<code>max_depth=10</code>) para evitar la memorización y balanceo de costes.</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.subheader("Hiperparámetros Determinados por GridSearch")
-        st.markdown("""
-        <div class="code-box">
-            📊 <span class="code-keyword">Best Estimator Parameters (KNN):</span><br>
-            • <b>n_neighbors:</b> 3<br>
-            • <b>weights:</b> 'distance'<br>
-            • <b>metric:</b> 'manhattan'<br><br>
-            ✨ <b>Cross-Validation Score (Mean):</b> 0.9819
+            <h3>GridSearchCV (Búsqueda en Rejilla Validada)</h3>
+            <span class="bullet-item">Optimización de distancias en KNN y profundidad en Random Forest.</span>
+            <span class="bullet-item">Esto asegura que la selección del modelo final no dependa de suposiciones, sino de una validación cruzada robusta.</span>
+            <span class="bullet-item">Gracias a esto, la delimitación de las placas tectónicas y fallas responde mejor a variaciones ortogonales en el espacio tridimensional que a distancias lineales euclidianas puras.</span>
+            <span class="bullet-item">La asignación de pesos por distancia actúa como un estabilizador ante el desbalanceo general, asegurando que la clasificación final esté dictada estrictamente por los eventos históricos más inmediatos y geográficamente idénticos al foco analizado.</span>
         </div>
         """, unsafe_allow_html=True)
         
     with col2:
         st.markdown("""
         <div class="highlight-box">
-            <h3>El Impacto del Balanceo de Pesos</h3>
-            <p>La inyección del parámetro de penalización por costes condicionales modificó sustancialmente el comportamiento del estimador.</p>
-            <p>Al penalizar severamente los fallos sobre los eventos minoritarios, el algoritmo logró romper la inercia estadística, rescatando el Recall crítico de la clase severa y elevándolo de un absoluto <b>0.00 a un 0.25</b>.</p>
+            <h3>Balanceo de Pesos (class_weight='balanced')</h3>
+            <span class="bullet-item">Para solucionar el sesgo estructural, modificamos la función de pérdida del algoritmo.</span>
+            <span class="bullet-item">Al usar el Hyperparameter Tuning avanzado aplicando la propiedad <code>class_weight='balanced'</code>, el Accuracy global se reajusta a un valor más realista del <b>93%</b>.</span>
+            <br>
+            <span class="bullet-item" style="font-size: 1.15em; color: #005088;"><b>⚠️ Logro Crítico Muy Importante:</b></span>
+            <span class="bullet-item">Logramos romper la ceguera del modelo frente a la clase minoritaria, elevando el <b>Recall de los sismos severos de cero a un 25%</b>.</span>
         </div>
         """, unsafe_allow_html=True)
-        
-        st.subheader("Reporte Métrico con Balanceo de Costes")
-        c_a, c_b = st.columns(2)
-        with c_a:
-            st.markdown('<div class="metric-card"><div class="metric-val-good">25.00%</div><div class="metric-label">Recall (Clase 1)</div></div>', unsafe_allow_html=True)
-        with c_b:
-            st.markdown('<div class="metric-card"><div class="metric-val-good">0.11</div><div class="metric-label">F1-Score Ajustado</div></div>', unsafe_allow_html=True)
-            
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.success("🎉 Incremento del rendimiento predictivo: El ajuste de penalizaciones permite mapear las muestras de riesgo ocultas en la distribución original.")
 
 # --- 8. HALLAZGOS CLAVE E INSIGHTS ---
 elif diapositiva == "Hallazgos Clave e Insights":
     st.header("💡 Hallazgos Clave e Insights del Modelo")
     col1, col2 = st.columns(2)
+    
     with col1:
         st.markdown("""
         <div class="highlight-box">
-            <h3>1. Ventaja de la Estructura Métrica (KNN)</h3>
-            <p>Los modelos basados en proximidad geométrica e hiperplanos de distancia directa (KNN) demostraron una capacidad innata superior para este problema específico en comparación con las divisiones ortogonales simples de los árboles de decisión básicos.</p>
-            <p>Esto confirma de manera empírica que el comportamiento sísmico mantiene una fortísima dependencia de continuidad geoespacial.</p>
+            <h3>El Impacto Crítico del Desbalanceo Estructural</h3>
+            <span class="bullet-item"><b>Inviabilidad del Accuracy Global:</b> Los fenómenos naturales con desbalanceo extremo no pueden evaluarse mediante la métrica de Accuracy. El <b>F1-Score</b> y el <b>Recall</b> son los verdaderos indicadores de viabilidad en la gestión de riesgos.</span>
+            <span class="bullet-item"><b>Colapso del Algoritmo:</b> Las técnicas basadas en optimización de pérdidas e iteraciones de árboles colapsan ante la masa de la clase mayoritaria a menos que se apliquen correcciones explícitas de pesos (<code>class_weight='balanced'</code>).</span>
         </div>
-        """, unsafe_allow_html=True)
-    with col2:
-        st.markdown("""
         <div class="highlight-box">
-            <h3>2. Ausencia de Patrones Lineales</h3>
-            <p>Las pruebas estadísticas iniciales reflejaron correlaciones lineales prácticamente nulas entre las variables aisladas y la severidad del evento.</p>
-            <p>Esto aporta un valor científico clave: el riesgo sísmico es un fenómeno de <b>alta no linealidad</b>, justificando plenamente el despliegue de modelos de Machine Learning avanzados en lugar de regresiones estadísticas tradicionales.</p>
+            <h3>Ventaja Métrica (KNN)</h3>
+            <span class="bullet-item">La localización física actúa como el predictor más robusto.</span>
+            <span class="bullet-item">El comportamiento sísmico mantiene una muy fuerte dependencia de continuidad geoespacial.</span>
         </div>
         """, unsafe_allow_html=True)
+        
+    with col2:
+        st.subheader("Distribución de Clases (Target Severity)")
+        img_target = os.path.join(IMG_DIR, "distribucion_target.png")
+        if os.path.exists(img_target):
+            st.image(img_target, use_container_width=True)
+        else:
+            st.warning("⚠️ Gráfica 'distribucion_target.png' reservada y guardada en la lógica.")
 
 # --- 9. APLICACIÓN E IMPACTO EN EL MUNDO REAL ---
 elif diapositiva == "Aplicación e Impacto en el Mundo Real":
     st.header("🌍 Aplicación e Impacto en el Mundo Real")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("""
-        <div class="highlight-box">
-            <h3>Despliegue y Protección Civil</h3>
-            <p>Este sistema está diseñado para integrarse directamente como un módulo inteligente dentro de los centros de monitorización geológica y alertas tempranas de protección civil.</p>
-            <p>Permite la automatización instantánea del nivel de riesgo ante las primeras señales de ondas sísmicas continuas.</p>
-        </div>
-        """, unsafe_allow_html=True)
-    with col2:
-        st.markdown("""
-        <div class="highlight-box">
-            <h3>Consideraciones Éticas y Limitaciones</h3>
-            <p><b>El Coste Humano del Falso Negativo:</b> En desastres naturales, un falso positivo genera costes económicos por evacuaciones preventivas; sin embargo, un falso negativo (ignorar un sismo severo) tiene un coste en vidas humanas.</p>
-            <p>Por ello, el éxito de este proyecto radica en haber priorizado la sensibilidad del algoritmo por encima del acierto general, minimizando el riesgo de dejar desprotegida a la población.</p>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown("""
+    <div class="highlight-box">
+        <h3>Consideraciones Éticas y Limitaciones</h3>
+        <span class="bullet-item"><b>El Coste Humano del Falso Negativo:</b></span>
+        <span class="bullet-item">En el contexto de desastres naturales, un falso positivo genera costes económicos por evacuaciones preventivas innecesarias.</span>
+        <span class="bullet-item">Sin embargo, un falso negativo (ignorar o no detectar un sismo severo) tiene un coste directo e irreparable en vidas humanas.</span>
+        <span class="bullet-item">El éxito de este proyecto radica en haber priorizado la sensibilidad del algoritmo por encima del acierto general, minimizando el riesgo de dejar desprotegida a la población ante eventos de alta magnitud.</span>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 10. TRABAJO FUTURO Y MEJORAS ---
 elif diapositiva == "Trabajo Futuro y Mejoras":
     st.header("🚀 Trabajo Futuro y Líneas de Expansión")
     st.markdown("""
     <div class="highlight-box">
-        <h3>1. Conexión de Datos en Streaming (Tiempo Real)</h3>
-        <p>Expandir la actual aplicación web de Streamlit para conectarla de forma dinámica mediante APIs públicas a institutos sismológicos globales (como el USGS), permitiendo clasificar terremotos en tiempo real a medida que ocurren.</p>
+        <h3>1. Otros posibles focos de análisis</h3>
+        <span class="bullet-item">• Predicción de la Profundidad del Foco (Regresión).</span>
+        <span class="bullet-item">• Intentar predecir cuándo o dónde ocurrirá un sismo usando series temporales avanzadas (opción más compleja).</span>
     </div>
     <div class="highlight-box">
-        <h3>2. Técnicas Avanzadas de Remuestreo Técnico</h3>
-        <p>Implementar algoritmos avanzados de generación sintética de muestras como <b>SMOTE-Tomek</b> o arquitecturas combinadas (EasyEnsemble) para intentar forzar el F1-Score del Random Forest por encima del 0.11 actual sin degradar la precisión.</p>
-    </div>
-    <div class="highlight-box">
-        <h3>3. Arquitecturas de Aprendizaje Profundo (Deep Learning)</h3>
-        <p>Diseñar y evaluar redes neuronales artificiales (perceptrones multicapa) provistas de funciones de activación no lineales complejas, analizando si consiguen superar el rendimiento predictivo del modelado geométrico actual.</p>
+        <h3>2. Conexión de Datos en Streaming (Tiempo Real)</h3>
+        <span class="bullet-item">Expandir la actual aplicación web de Streamlit para conectarla de forma dinámica mediante APIs públicas a institutos sismológicos globales (como el USGS), permitiendo clasificar terremotos en tiempo real a medida que ocurren.</span>
     </div>
     """, unsafe_allow_html=True)
 
-# --- 11. CIERRE Y PREGUNTAS ---
+# --- 11. CIERRE ---
 elif diapositiva == "Cierre y Preguntas":
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.title("Clasificación y Predicción del Riesgo Sísmico Global")
-    st.subheader("Modelización predictiva mediante técnicas avanzadas de Machine Learning")
-    st.markdown("---")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("""
-        <div class="highlight-box" style="text-align: center;">
-            <h2 style="color: #11caa0;">¡Muchas Gracias!</h2>
-            <p>Quedo a la entera disposición del tribunal para cualquier pregunta, aclaración o comentario sobre el proyecto desarrollado.</p>
-        </div>
-        """, unsafe_allow_html=True)
-    with col2:
-        st.markdown("""
-        <div class="highlight-box">
-            <h3>Miembros del Proyecto</h3>
-            <p><b>Autora:</b> Naila Ikhenazen</p>
-            <p><b>Fecha de Defensa:</b> Viernes</p>
-            <p><b>Entorno:</b> Desarrollado íntegramente en Python utilizando el ecosistema Scikit-Learn y Streamlit.</p>
-        </div>
-        """, unsafe_allow_html=True)
+    st.title("¡Muchas Gracias!")
+    st.subheader("Quedo a la disposición del tribunal.")

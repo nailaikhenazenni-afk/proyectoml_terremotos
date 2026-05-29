@@ -178,7 +178,7 @@ Algoritmos sugeridos: Regresión Lineal, o un Regresor de Random Forest.
 - Análisis de Réplicas (Clasificación Binaria) 
 Predecir si un terremoto principal de gran magnitud generará una réplica de magnitud mayor a 5.0 en las siguientes 48 horas dentro de un radio de acción determinado.
 
-- Intentar predecir cuándo o dónde ocurrirá un sismo usando series temporales avanzadas (opción más complejos)
+- Intentar predecir cuándo o dónde ocurrirá un sismo usando series temporales avanzadas (opción más compleja)
 
 
 ---
