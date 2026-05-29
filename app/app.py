@@ -141,11 +141,11 @@ elif diapositiva == "Mapeo de Correlación y Definición del Target":
         """, unsafe_allow_html=True)
     with col2:
         st.subheader("Mapa de Calor de Correlación (Variables Dummies)")
-        img_heatmap_dummies = os.path.join(IMG_DIR, "mapa_calor2.png")
+        img_heatmap_dummies = os.path.join(IMG_DIR, "mapa_calor1.png")
         if os.path.exists(img_heatmap_dummies):
             st.image(img_heatmap_dummies, caption="Matriz de correlación extendida con variables categóricas dummies.", use_container_width=True)
         else:
-            st.warning("⚠️ Espacio reservado para: mapa_calor2.png")
+            st.warning("⚠️ Espacio reservado para: mapa_calor1.png")
 
 # --- 5. INGENIERÍA DE CARACTERÍSTICAS Y SELECCIÓN ---
 elif diapositiva == "Ingeniería de Características y Selección":
